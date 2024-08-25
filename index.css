@@ -1,0 +1,122 @@
+@import url("https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&display=swap");
+
+body {
+  margin: 0;
+  padding: 0;
+  font-size: 30px;
+  text-align: center;
+  background-image: url("/images/Blackjack.jpg");
+  background-size: cover;
+  color: white;
+  box-sizing: border-box;
+  font-family: "Josefin Sans", sans-serif;
+}
+h1 {
+  color: goldenrod;
+}
+button {
+  padding: 8px 16px;
+  border-radius: 6px;
+  border: 2px solid goldenrod;
+  cursor: pointer;
+  background-color: #000000;
+  color: white;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-align: center;
+}
+.cards-container {
+  height: 200px;
+  margin: 40px auto;
+  width: 50%;
+  background-color: #000000;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 40px;
+  border: 6px solid goldenrod;
+  border-style: double;
+}
+.card {
+  width: 125px;
+  height: 180px;
+  background-size: cover;
+  transition: transform 0.3s;
+}
+.card:hover {
+  transform: perspective(500px) rotateX(10deg) rotateY(10deg);
+}
+
+@media (max-width: 640px) {
+  body {
+    font-size: 24px;
+  }
+
+  button {
+    padding: 7px 14px;
+    font-size: 16px;
+  }
+
+  .cards-container {
+    width: 70%;
+    height: 180px;
+    gap: 8px;
+    margin-top: 30px;
+    border-width: 5px;
+  }
+
+  .card {
+    width: 100px;
+    height: 150px;
+  }
+}
+
+@media (max-width: 480px) {
+  body {
+    font-size: 20px;
+  }
+
+  button {
+    padding: 6px 12px;
+    font-size: 14px;
+  }
+
+  .cards-container {
+    width: 80%;
+    height: 150px;
+    gap: 5px;
+    margin-top: 20px;
+    border-width: 4px;
+  }
+
+  .card {
+    width: 82px;
+    height: 120px;
+  }
+}
+
+@media (max-width: 320px) {
+  body {
+    font-size: 18px;
+  }
+
+  button {
+    padding: 5px 10px;
+    font-size: 8px;
+  }
+
+  .cards-container {
+    width: 90%;
+    height: 130px;
+    gap: 4px;
+    margin-top: 20px;
+    border-width: 3px;
+  }
+
+  .card {
+    width: 60px;
+    height: 90px;
+  }
+}
