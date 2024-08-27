@@ -1,13 +1,34 @@
 const cardsDisplay = document.getElementById("cards-display");
 const totalDisplay = document.getElementById("total-display");
+const moneyDisplay = document.getElementById("money-display");
 const inGameMsg = document.getElementById("message-display");
 const startGameBtn = document.getElementById("start-btn");
 const newCardBtn = document.getElementById("new-card-btn");
 let message = "";
 let cards = [];
 let total = 0;
+let dealerCards = [];
+let dealersTotal = 0;
 let hasBlackjack = false;
 let isAlive = false;
+
+let playerMoney = 200;
+let playerBet = 0;
+
+updateMoney();
+
+function placeBet(amount) {
+  if (amount > playerMoney) {
+    message = "No tienes suficiente dinero!";
+    inGameMsg.textContent = message;
+    playerBet = 0;
+  } else {
+    playerBet = amount;
+    playerMoney -= amount;
+  }
+  updateMoney();
+  startGame();
+}
 
 function getRandomCard() {
   const randomCard = Math.floor(Math.random() * 13) + 1;
@@ -24,20 +45,22 @@ function startGame() {
   cards = [getRandomCard(), getRandomCard()];
   total = cards[0] + cards[1];
   totalDisplay.textContent = "Total: " + total;
+
+  dealerCards = [getRandomCard(), getRandomCard()];
+  dealersTotal = dealerCards[0] + dealerCards[1];
   isAlive = true;
   hasBlackjack = false;
   message = "";
   renderGame();
 }
 
-function startOrReset() {
-  startGame();
+function updateMoney() {
+  moneyDisplay.textContent = "Dinero: $" + playerMoney;
 }
 
 function renderGame() {
   cardsDisplay.textContent = "Cartas: " + cards.join(", ");
   totalDisplay.textContent = "Total: " + total;
-
   const handContainer = document.getElementById("my-hand");
   handContainer.innerHTML = "";
 
@@ -46,8 +69,20 @@ function renderGame() {
     cardDiv.className = "card";
     cardDiv.style.backgroundImage = `url('images/cards/${getCardImage(card)}')`;
     handContainer.appendChild(cardDiv);
-
     if (index === cards.length - 1) {
+      setTimeout(() => cardDiv.classList.add("flip"), 100);
+    }
+  });
+
+  const dealersHandContainer = document.getElementById("dealer-display");
+  dealersHandContainer.innerHTML = "";
+
+  dealerCards.forEach((card, index) => {
+    const cardDiv = document.createElement("div");
+    cardDiv.className = "card";
+    cardDiv.style.backgroundImage = `url('images/cards/${getCardImage(card)}')`;
+    dealersHandContainer.appendChild(cardDiv);
+    if (index === dealerCards.length - 1) {
       setTimeout(() => cardDiv.classList.add("flip"), 100);
     }
   });
@@ -56,7 +91,7 @@ function renderGame() {
     message = "¿Te gustaría otra carta?";
     newCardBtn.disabled = false;
   } else if (total === 21) {
-    message = "Eso es Blackjack!";
+    message = "Blackjack!";
     hasBlackjack = true;
     isAlive = false;
     newCardBtn.disabled = true;
@@ -94,4 +129,56 @@ function hitMe() {
     renderGame();
   }
 }
-startGame();
+
+function iStand() {
+  if (isAlive || !hasBlackjack) {
+    newCardBtn.disabled = true;
+    dealersTurn();
+  }
+}
+
+function dealersTurn() {
+  while (dealersTotal < 17) {
+    const dealersNewCard = getRandomCard();
+    dealerCards.push(dealersNewCard);
+    dealersTotal += dealersNewCard;
+    renderGame();
+  }
+  checkWinner();
+}
+
+function checkWinner() {
+  if (total > 21) {
+    message = "Te pasaste! Gano la casa!";
+    playerBet = 0;
+  } else if (dealersTotal > 21) {
+    message = "Repartidor se paso! Tu Ganas!";
+    playerMoney += playerBet * 2;
+  } else if (total > dealersTotal) {
+    message = "Ganaste";
+    playerMoney += playerBet * 2;
+  } else if (total === dealersTotal) {
+    message = "Es un empate!";
+    playerMoney += playerBet;
+  } else {
+    message = "Gano la casa!";
+    playerBet = 0;
+  }
+  updateMoney();
+  playerBet = 0;
+  inGameMsg.textContent = message;
+  startOrReset();
+}
+
+function startOrReset() {
+  if (hasBlackjack || !isAlive) {
+    message = "Haz una apuesta?";
+    inGameMsg.textContent = message;
+    isAlive = false;
+    hasBlackjack = false;
+  } else if (playerBet > 0) {
+    startGame();
+  }
+}
+
+startOrReset();
