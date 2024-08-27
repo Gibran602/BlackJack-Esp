@@ -97,7 +97,7 @@ function renderGame() {
     message = "Blackjack!";
     hasBlackjack = true;
     isAlive = false;
-    playerMoney += playerBet;
+    playerMoney += playerBet * 2;
     updateMoney();
     newCardBtn.disabled = true;
     standBtn.disabled = true;
