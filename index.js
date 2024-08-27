@@ -5,6 +5,10 @@ const inGameMsg = document.getElementById("message-display");
 const startGameBtn = document.getElementById("start-btn");
 const newCardBtn = document.getElementById("new-card-btn");
 const standBtn = document.getElementById("stand-btn");
+const betTen = document.getElementById("bet-ten");
+const betTwenty = document.getElementById("bet-twenty");
+const betFifty = document.getElementById("bet-fifty");
+
 let message = "";
 let cards = [];
 let total = 0;
@@ -23,6 +27,10 @@ function placeBet(amount) {
     message = "No tienes suficiente dinero!";
     inGameMsg.textContent = message;
     playerBet = 0;
+    betTen.disabled = true;
+    betTwenty.disabled = true;
+    betFifty.disabled = true;
+    newCardBtn.disabled = true;
   } else {
     playerBet = amount;
     playerMoney -= amount;
@@ -72,9 +80,6 @@ function renderGame() {
     cardDiv.className = "card";
     cardDiv.style.backgroundImage = `url('images/cards/${getCardImage(card)}')`;
     handContainer.appendChild(cardDiv);
-    /* if (index === cards.length - 1) {
-      setTimeout(() => cardDiv.classList.add("flip"), 100);
-    }*/
   });
 
   const dealersHandContainer = document.getElementById("dealer-display");
@@ -85,9 +90,6 @@ function renderGame() {
     cardDiv.className = "card";
     cardDiv.style.backgroundImage = `url('images/cards/${getCardImage(card)}')`;
     dealersHandContainer.appendChild(cardDiv);
-    /* if (index === dealerCards.length - 1) {
-      setTimeout(() => cardDiv.classList.add("flip"), 100);
-    }*/
   });
 
   if (total < 21) {
@@ -149,8 +151,8 @@ function dealersTurn() {
     const dealersNewCard = getRandomCard();
     dealerCards.push(dealersNewCard);
     dealersTotal += dealersNewCard;
-    renderGame();
   }
+  renderGame();
   checkWinner();
 }
 
@@ -181,12 +183,27 @@ function checkWinner() {
 }
 
 function startOrReset() {
-  if (hasBlackjack || !isAlive) {
+  if (playerMoney <= 0) {
+    playerMoney = 200;
+    playerBet = 0;
+    updateMoney();
+    cards = [];
+    total = 0;
+    dealerCards = [];
+    dealersTotal = 0;
+    betTen.disabled = false;
+    betTwenty.disabled = false;
+    betFifty.disabled = false;
+    newCardBtn.disabled = true;
+    standBtn.disabled = true;
+  } else if (hasBlackjack || !isAlive) {
     message = "Quieres jugar una ronda? Haz una apuesta!";
     inGameMsg.textContent = message;
     isAlive = false;
     hasBlackjack = false;
   } else if (playerBet > 0) {
+    handContainer.innerHTML = "";
+    dealersHandContainer.innerHTML = "";
     startGame();
   }
   standBtn.disabled = true;
