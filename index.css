@@ -60,7 +60,6 @@ button {
   font-weight: 600;
   letter-spacing: 1px;
   text-align: center;
-  transition: 1s;
 }
 button:hover {
   background-color: antiquewhite;
@@ -108,7 +107,7 @@ button:hover {
   width: 125px;
   height: 180px;
   background-size: cover;
-  transition: transform 0.3s;
+  transition: 0.3s;
 }
 .card:hover {
   transform: perspective(500px) rotateX(10deg) rotateY(10deg);

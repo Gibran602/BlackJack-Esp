@@ -23,17 +23,24 @@ let playerBet = 0;
 updateMoney();
 
 function placeBet(amount) {
+  console.log("Placing bet: ", amount);
+  console.log("Current player money: ", playerMoney);
   if (amount > playerMoney) {
     message = "No tienes suficiente dinero!";
     inGameMsg.textContent = message;
     playerBet = 0;
+    newCardBtn.disabled = true;
     betTen.disabled = true;
     betTwenty.disabled = true;
     betFifty.disabled = true;
-    newCardBtn.disabled = true;
   } else {
     playerBet = amount;
     playerMoney -= amount;
+    newCardBtn.disabled = false;
+    standBtn.disabled = false;
+    betTen.disabled = false;
+    betTwenty.disabled = false;
+    betFifty.disabled = false;
   }
   updateMoney();
   startGame();
@@ -95,7 +102,7 @@ function renderGame() {
   if (total < 21) {
     message = "¿Te gustaría otra carta?";
     newCardBtn.disabled = false;
-  } else if (total === 21 && cards.length === 2) {
+  } else if (total === 21) {
     message = "Blackjack!";
     hasBlackjack = true;
     isAlive = false;
@@ -177,9 +184,9 @@ function checkWinner() {
     playerBet = 0;
   }
   updateMoney();
-  playerBet = 0;
+  console.log("Updating money display: ", playerMoney);
+  //playerBet = 0;
   inGameMsg.textContent = message;
-  startOrReset();
 }
 
 function startOrReset() {
@@ -191,9 +198,9 @@ function startOrReset() {
     total = 0;
     dealerCards = [];
     dealersTotal = 0;
-    betTen.disabled = false;
-    betTwenty.disabled = false;
-    betFifty.disabled = false;
+    betTen.disabled = true;
+    betTwenty.disabled = true;
+    betFifty.disabled = true;
     newCardBtn.disabled = true;
     standBtn.disabled = true;
   } else if (hasBlackjack || !isAlive) {
@@ -201,9 +208,10 @@ function startOrReset() {
     inGameMsg.textContent = message;
     isAlive = false;
     hasBlackjack = false;
+    betTen.disabled = false;
+    betTwenty.disabled = false;
+    betFifty.disabled = false;
   } else if (playerBet > 0) {
-    handContainer.innerHTML = "";
-    dealersHandContainer.innerHTML = "";
     startGame();
   }
   standBtn.disabled = true;
