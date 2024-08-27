@@ -169,6 +169,7 @@ button:hover {
 
   h1 {
     font-size: 40px;
+    text-shadow: 1px 1px 1px #d20202;
   }
 
   #message-display {
@@ -199,8 +200,10 @@ button:hover {
     border-width: 4px;
   }
   .dealers-container {
+    width: 80%;
     height: 150px;
     gap: 5px;
+    border-width: 4px;
   }
 
   .card {
@@ -216,6 +219,7 @@ button:hover {
 
   h1 {
     font-size: 30px;
+    text-shadow: 1px 1px 1px #d20202;
   }
 
   #message-display {

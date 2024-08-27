@@ -4,6 +4,7 @@ const moneyDisplay = document.getElementById("money-display");
 const inGameMsg = document.getElementById("message-display");
 const startGameBtn = document.getElementById("start-btn");
 const newCardBtn = document.getElementById("new-card-btn");
+const standBtn = document.getElementById("stand-btn");
 let message = "";
 let cards = [];
 let total = 0;
@@ -50,6 +51,7 @@ function startGame() {
   dealersTotal = dealerCards[0] + dealerCards[1];
   isAlive = true;
   hasBlackjack = false;
+  standBtn.disabled = false;
   message = "";
   renderGame();
 }
@@ -61,6 +63,7 @@ function updateMoney() {
 function renderGame() {
   cardsDisplay.textContent = "Cartas: " + cards.join(", ");
   totalDisplay.textContent = "Total: " + total;
+
   const handContainer = document.getElementById("my-hand");
   handContainer.innerHTML = "";
 
@@ -69,9 +72,9 @@ function renderGame() {
     cardDiv.className = "card";
     cardDiv.style.backgroundImage = `url('images/cards/${getCardImage(card)}')`;
     handContainer.appendChild(cardDiv);
-    if (index === cards.length - 1) {
+    /* if (index === cards.length - 1) {
       setTimeout(() => cardDiv.classList.add("flip"), 100);
-    }
+    }*/
   });
 
   const dealersHandContainer = document.getElementById("dealer-display");
@@ -82,23 +85,27 @@ function renderGame() {
     cardDiv.className = "card";
     cardDiv.style.backgroundImage = `url('images/cards/${getCardImage(card)}')`;
     dealersHandContainer.appendChild(cardDiv);
-    if (index === dealerCards.length - 1) {
+    /* if (index === dealerCards.length - 1) {
       setTimeout(() => cardDiv.classList.add("flip"), 100);
-    }
+    }*/
   });
 
   if (total < 21) {
     message = "¿Te gustaría otra carta?";
     newCardBtn.disabled = false;
-  } else if (total === 21) {
+  } else if (total === 21 && cards.length === 2) {
     message = "Blackjack!";
     hasBlackjack = true;
     isAlive = false;
+    playerMoney += playerBet;
+    updateMoney();
     newCardBtn.disabled = true;
+    standBtn.disabled = true;
   } else {
     message = "Te pasaste!";
     isAlive = false;
     newCardBtn.disabled = true;
+    standBtn.disabled = true;
   }
   inGameMsg.textContent = message;
 }
@@ -160,6 +167,9 @@ function checkWinner() {
   } else if (total === dealersTotal) {
     message = "Es un empate!";
     playerMoney += playerBet;
+  } else if (total === 21) {
+    message = "Blackjack!";
+    playerMoney += playerBet * 2;
   } else {
     message = "Gano la casa!";
     playerBet = 0;
@@ -172,13 +182,14 @@ function checkWinner() {
 
 function startOrReset() {
   if (hasBlackjack || !isAlive) {
-    message = "Haz una apuesta!";
+    message = "Quieres jugar una ronda? Haz una apuesta!";
     inGameMsg.textContent = message;
     isAlive = false;
     hasBlackjack = false;
   } else if (playerBet > 0) {
     startGame();
   }
+  standBtn.disabled = true;
 }
 
 startOrReset();
