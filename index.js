@@ -172,7 +172,7 @@ function checkWinner() {
 
 function startOrReset() {
   if (hasBlackjack || !isAlive) {
-    message = "Haz una apuesta?";
+    message = "Haz una apuesta!";
     inGameMsg.textContent = message;
     isAlive = false;
     hasBlackjack = false;
