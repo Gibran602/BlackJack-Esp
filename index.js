@@ -99,23 +99,6 @@ function renderGame() {
     dealersHandContainer.appendChild(cardDiv);
   });
 
-  if (total < 21) {
-    message = "¿Te gustaría otra carta?";
-    newCardBtn.disabled = false;
-  } else if (total === 21) {
-    message = "Blackjack!";
-    hasBlackjack = true;
-    isAlive = false;
-    playerMoney += playerBet * 2;
-    updateMoney();
-    newCardBtn.disabled = true;
-    standBtn.disabled = true;
-  } else {
-    message = "Te pasaste!";
-    isAlive = false;
-    newCardBtn.disabled = true;
-    standBtn.disabled = true;
-  }
   inGameMsg.textContent = message;
 }
 
@@ -185,7 +168,6 @@ function checkWinner() {
   }
   updateMoney();
   console.log("Updating money display: ", playerMoney);
-  //playerBet = 0;
   inGameMsg.textContent = message;
 }
 
